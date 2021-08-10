@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add new ingredient</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body class="flex">
+    <div class="container flex">
+        <div class="input-form flex">
+            <h3>Create new</h3>
+            <form method="post" action="/ingredients">
+                <label for="name">Name: </label>
+                <input type="text" id="name" name="name"/>
+                <label for="type">Type: </label>
+                <select id="type" name="type">
+                    <option th:each="t:${types}" th:text="${t}" th:value="${t}"/>
+                </select>
+                <input type="submit" th:value="Отправить"/>
+            </form>
+        </div>
+        <div class="main">
+            <div class="pane">
+                <div class="pane-item">
+                    <a href="/ingredients">ALL</a>
+                </div>
+                <div class="pane-item" th:each="t:${types}">
+                    <a th:href="@{'/ingredients/category?type='+${t}+'&page=0'}" th:text="${t}"></a>
+                </div>
+            </div>
+            <div class="ingredients">
+                <h1 th:if="${ingredients.isEmpty()}">Empty list!</h1>
+                <div class="category" th:each="category:${ingredients.keySet()}">
+                    <h1 th:text="${category}"/>
+                    <div class="category-list">
+                        <div class="category-item" th:each="item:${ingredients.get(category)}">
+                            <span th:text="${item.name}"/>
+                        </div>
+                        <a th:if="${ingredients.get(category).size()==6}" th:href="@{'/ingredients/category?type='+${category}+'&page=0'}">Show all</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

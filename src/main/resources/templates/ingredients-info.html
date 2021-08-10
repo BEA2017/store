@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add new ingredient</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body class="flex">
+<div class="container flex">
+    <div class="input-form flex">
+        <h3 th:text="'Create new '+${currentCategory}"/>
+        <form method="post" action="/ingredients">
+            <label for="name">Name: </label>
+            <input type="text" id="name" name="name"/>
+            <input type="submit" th:value="Отправить"/>
+        </form>
+    </div>
+    <div class="main">
+        <div class="pane">
+            <div class="pane-item">
+                <a href="/ingredients">ALL</a>
+            </div>
+            <div class="pane-item" th:each="t:${types}">
+                <a th:href="@{'/ingredients/category?type='+${t}+'&page=0'}" th:text="${t}"></a>
+            </div>
+        </div>
+        <div class="ingredients-table flex">
+            <div>
+                <form method="post" action="/ingredients/delete">
+                <table>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Creation</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                        <tr th:if="${ingredients.get(currentCategory)==null}">
+                            <td colspan="4">Empty list!</td>
+                        </tr>
+                        <tr th:each="ingredient:${ingredients.get(currentCategory)}">
+                            <td th:text="${ingredient.id}">ID</td>
+                            <td th:text="${ingredient.name}">Name</td>
+                            <td th:text="${ingredient.created}">Creation</td>
+                            <td><input type="checkbox" name="elem" th:value="${ingredient.id}"/></td>
+                        </tr>
+                </table>
+                    <input type="submit" value="Delete">
+                </form>
+                <div class="pages" th:if="${pageCount}>0">
+                    <a th:href="'/ingredients/category?type='+${currentCategory}+'&page='+${page}" th:each="page : ${#numbers.sequence(1, pageCount)}" th:text="${page}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
